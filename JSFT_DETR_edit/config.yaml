@@ -1,0 +1,53 @@
+seed: 42
+
+data:
+  img_dir: "/data2/project/2025summer/yjh0913/DB-1/Images"
+  mask_dir: "/data2/project/2025summer/yjh0913/DB-1/Masks"
+  img_size: 640
+  train_ratio: 0.7
+  test_ratio: 0.2
+  val_ratio: 0.1   # optional validation split (현재 코드는 로더만 만들고 사용 여부는 선택)
+
+model:
+  num_classes: 1
+  hidden_dim: 128
+  num_queries: 50
+  backbone_pretrained: false   # 논문: from scratch (ResNet-18)
+
+matcher:
+  cost_class: 1
+  cost_bbox: 5
+  cost_giou: 2
+
+loss:
+  eos_coef: 0.1
+  weights:
+    loss_ce: 2
+    loss_bbox: 5
+    loss_giou: 2
+
+optim:
+  lr_backbone: 1.0e-5
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+
+amp:
+  enabled: true
+
+train:
+  epochs: 100
+  batch_size: 1
+  num_workers: 0
+  accum_steps: 4
+  clip_norm: 1.0
+
+eval:
+  score_thresh: 0.5
+  iou_thresh: 0.5
+  ckpt: ""   # used only for eval-only if --ckpt not given
+
+save:
+  dir: "./checkpoints"
+  metric: "map50"  # "map50" or "f1"
+
+
